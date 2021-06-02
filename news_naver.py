@@ -36,7 +36,7 @@ list_science = []
 ranking = 10
 
 #politics
-print("Politics News\n")
+print("\nPolitics News\n")
 url_politics = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=100&sid2=269"
 res_politics = requests.get(url_politics, headers=headers).text
 soup_politics = BeautifulSoup(res_politics, "html.parser")
@@ -52,11 +52,11 @@ tags = get_tags(' '.join(list_politics), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 
 #economy
-print("Economy News\n")
+print("\nEconomy News\n")
 url_economy = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=101&sid2=263"
 res_economy = requests.get(url_economy, headers=headers).text
 soup_economy = BeautifulSoup(res_economy, "html.parser")
@@ -72,11 +72,11 @@ tags = get_tags(' '.join(list_economy), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 
 #society
-print("Society News\n")
+print("\nSociety News\n")
 url_society = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=102&sid2=257"
 res_society = requests.get(url_society, headers=headers).text
 soup_society = BeautifulSoup(res_society, "html.parser")
@@ -92,10 +92,10 @@ tags = get_tags(' '.join(list_society), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 #culture
-print("Culture News\n")
+print("\nCulture News\n")
 url_culture = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=103&sid2=245"
 res_culture = requests.get(url_culture, headers=headers).text
 soup_culture = BeautifulSoup(res_culture, "html.parser")
@@ -111,11 +111,11 @@ tags = get_tags(' '.join(list_culture), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 
 #world
-print("World News\n")
+print("\nWorld News\n")
 url_world = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=104&sid2=322"
 res_world = requests.get(url_world, headers=headers).text
 soup_world = BeautifulSoup(res_world, "html.parser")
@@ -131,11 +131,11 @@ tags = get_tags(' '.join(list_world), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 
 #IT
-print("IT News\n")
+print("\nIT News\n")
 url_IT = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=105&sid2=230"
 res_IT = requests.get(url_IT, headers=headers).text
 soup_IT = BeautifulSoup(res_IT, "html.parser")
@@ -151,11 +151,11 @@ tags = get_tags(' '.join(list_IT), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 
 #science
-print("Science News\n")
+print("\nScience News\n")
 url_science = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=105&sid2=228"
 res_science = requests.get(url_science, headers=headers).text
 soup_science = BeautifulSoup(res_science, "html.parser")
@@ -171,7 +171,7 @@ tags = get_tags(' '.join(list_science), ranking)
 for tag in tags:
 	noun = tag['tag']
 	count = tag['count']
-	print('{} {}\n'.format(noun, count))
+	print('{} {}'.format(noun, count))
 
 
 #end

@@ -9,15 +9,20 @@ from collections import Counter
 
 headers = { "User-Agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
 ranking = 10
-date = 20210604
+date = 20210606
+
+exception = "동영상 기사 포토 사진 \r \t \n"
 
 def get_tags(text, ranking):
 	spliter = Okt()
 	nouns = spliter.nouns(text)
-	nounsnot1 = [n for n in nouns if len(n) > 1]
+	
+	nounsException = [word for word in nouns if not word in exception]
+	
+	nounsnot1 = [n for n in nounsException if len(n) > 1]
 	count = Counter(nounsnot1)
+		
 	return_list = []
-
 	for n, c in count.most_common(ranking):
 		temp = {'tag': n, 'count': c}
 		return_list.append(temp)

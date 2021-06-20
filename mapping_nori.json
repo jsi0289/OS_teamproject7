@@ -1,0 +1,85 @@
+{
+    "settings": {
+      "analysis": {
+        "analyzer": {
+          "nori_discard": {
+            "tokenizer": "nori_t_discard",
+            "filter": "my_shingle"
+          }
+        },
+        "tokenizer": {
+          "nori_t_discard": {
+            "type": "nori_tokenizer",
+            "decompound_mode": "discard"
+          }
+        },
+        "filter": {
+          "my_shingle": {
+            "type": "shingle",
+            "token_separator": "",
+            "max_shingle_size": 3
+          }
+        }
+      }
+    },
+    "mappings": {
+        "properties": {
+            "1.Platform": {
+              "type": "text",
+              "fields": {
+                "nori_discard": {
+                  "type": "text",
+                  "analyzer": "nori_discard",
+                  "search_analyzer": "standard"
+                }
+              }
+            },
+        "2.Category": {
+          "type": "text",
+          "fields": {
+            "nori_discard": {
+              "type": "text",
+              "analyzer": "nori_discard",
+              "search_analyzer": "standard"
+                }
+              }
+            },
+        "3.Title": {
+          "type": "text",
+          "fields": {
+            "nori_discard": {
+              "type": "text",
+              "analyzer": "nori_discard",
+              "search_analyzer": "standard"
+                }
+              } 
+            },
+        "4.Url": {
+          "type": "text",
+          "fields": {
+            "nori_discard": {
+              "type": "text",
+              "analyzer": "nori_discard",
+              "search_analyzer": "standard"
+                }
+              }
+            },
+        "5.Date":{
+          "type": "integer"
+            },
+        "6.Number":{
+          "type": "integer"
+        },
+        "7.Content": {
+          "type": "text",
+          "fields": {
+            "nori_discard": {
+              "type": "text",
+              "analyzer": "nori_discard",
+              "search_analyzer": "standard"
+                }
+              } 
+            }
+      }
+    }
+  }

@@ -11,7 +11,6 @@ from konlpy.tag import Okt
 from collections import Counter
 from elasticsearch import Elasticsearch
 
-
 def get_tags(text, ranking): #특수문자 및 한 글자 제거
 	spliter = Okt()
 	nouns = spliter.nouns(text)
@@ -30,6 +29,8 @@ def get_tags(text, ranking): #특수문자 및 한 글자 제거
 def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON에 저장
 	list_n = []
 	data = []
+	text_check = ""
+	text_check1 = ""
 	page_num = 0
 	count_news = 0
 	page = 1
@@ -67,6 +68,20 @@ def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON
 
 			if(text_split == '동영상기사'):
 				continue
+			
+			if(text_check == text_split):
+				continue
+
+			text_check = text_split
+
+			content_split = content[0].text
+			content_split = content_split.split()
+			content_split = " ".join(content_split)
+
+			if(content_split[0:6] == "동영상 뉴스"):
+				content_split = content_split[70:]
+			else:
+				content_split = content_split[63:]
 
 			count_news += 1
 			list_n.append(title[i].text)
@@ -77,7 +92,7 @@ def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON
                 '4.Url': title[i]['href'],
                 '5.Date': date,
                 '6.Number': count_news,
-				'7.Content': content[0].text
+				'7.Content': content_split
             })
 		for i in range(len(title1)):
 			if len(title1[i].text) < 3:
@@ -98,6 +113,20 @@ def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON
 			if(text_split1 == '동영상기사'):
 				continue
 
+			if(text_check1 == text_split1):
+				continue
+
+			text_check1 = text_split1
+
+			content_split1 = content1[0].text
+			content_split1 = content_split1.split()
+			content_split1 = " ".join(content_split1)
+
+			if(content_split1[0:6] == "동영상 뉴스"):
+				content_split1 = content_split1[70:]
+			else:
+				content_split1 = content_split1[63:]
+			
 			count_news += 1
 			list_n.append(title1[i].text)
 			data.append({
@@ -107,7 +136,7 @@ def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON
                 '4.Url': title1[i]['href'],
                 '5.Date': date,
                 '6.Number': count_news,
-				'7.Content': content1[0].text
+				'7.Content': content_split1
             })   
 		page += 1
 	tags = get_tags(' '.join(list_n), ranking)
@@ -177,11 +206,11 @@ if __name__ == '__main__':
 	
 	es = Elasticsearch(f'{url_elastic}:{port}')
 
-	# ####### 1.네이버뉴스 크롤링 및 단어 빈도수 출력과 기사들 JSON에 저장
-	# print("===NAVER NWES===")
-	# for i in range(0,6):
-	# 	print('\n'+ naver_categories[i] + ' 뉴스')
-	# 	crawler_naver(naver_categories[i], naver_sid2[i], naver_sid1[i], date)
+	####### 1.네이버뉴스 크롤링 및 단어 빈도수 출력과 기사들 JSON에 저장
+	print("===NAVER NWES===")
+	for i in range(0,6):
+		print('\n'+ naver_categories[i] + ' 뉴스')
+		crawler_naver(naver_categories[i], naver_sid2[i], naver_sid1[i], date)
 
 	# ###### 2.index 삭제 ( Index 초기화 할때 아니면 항상 주석 처리 )
 	# delete_index()

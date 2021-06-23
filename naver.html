@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+  
+<html>
+        <head>
+        <title>Keyword Search</title>
+        </head>
+        <body>
+            <form method="POST" action="/naver/result">
+                <h1>
+                <p style="text-align:center;">검색된 뉴스 목록</p>
+                {% for i in item %}
+                   {% print(i) %}    
+                   <button type="submit">기사 내용 보기</button>            
+                 </br>
+                {% endfor %}
+                </h1>
+            </form>
+        </body>
+</html>
+
+<!DOCTYPE html>
+  

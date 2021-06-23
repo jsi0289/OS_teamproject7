@@ -34,7 +34,6 @@ def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON
 	page_num = 0
 	count_news = 0
 	page = 1
-	num = 0
 
 	while True:
 		url = 'https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid2=' + str(sid2) + '&sid1=' + str(sid1) + '&date=' + str(date) + '&page=' + str(page)
@@ -142,15 +141,13 @@ def crawler_naver(category, sid2, sid1, date): #웹 크롤링 후 결과를 JSON
 	tags = get_tags(' '.join(list_n), ranking)
 
 	for tag in tags:
-		num += 1
-		noun = tag['tag']
-		count = tag['count']
-		print(f'{num}. ' + '{} {}'.format(noun, count))
+		result_ranking.append(tag['tag'])
+		result_ranking1.append(tag['count'])
 
 	with open('Naver_news_Data[' + category + '].json', 'w', encoding='utf-8') as f:
 		json.dump(data, f, indent='\t', ensure_ascii=False)
-		
-	print('총 페이지 : ' + str(page - 1))
+
+	return result_ranking, result_ranking1
  
 def check_index(): #Index 조회
    return es.indices.get_alias("*")
@@ -188,65 +185,53 @@ def search(keyword=None): #DB에 저장된 기사를 제목으로 검색
 	}
 	res = es.search(index=index, body=body, request_timeout= 30)
 
-	return res
+	for doc in res['hits']['hits']:
+		result_search.append(doc['_source']['3.Title'])
+		result_search1.append(doc['_source']['7.Content'])
 
-if __name__ == '__main__':
-	headers_naver = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48"}
-	exception = "동영상 기사 포토 사진 \r \t \n"
-	url_elastic = '127.0.0.1'
-	port = '9200'
-	index = 'news'
-	mapping_json = 'mapping_nori.json'
-	naver_categories = ['society', 'politics', 'economic', 'culture', 'science', 'IT']
-	naver_sid1 = [102, 100, 101, 103, 105, 105]
-	naver_sid2 = [257, 269, 263, 245, 228 ,230]
-	ranking = 10
-	d_today = datetime.date.today()
-	date = '20' + d_today.strftime('%y%m%d')
-	
-	es = Elasticsearch(f'{url_elastic}:{port}')
+	return result_search, result_search1
 
-	####### 1.네이버뉴스 크롤링 및 단어 빈도수 출력과 기사들 JSON에 저장
-	print("===NAVER NWES===")
-	for i in range(0,6):
-		print('\n'+ naver_categories[i] + ' 뉴스')
-		crawler_naver(naver_categories[i], naver_sid2[i], naver_sid1[i], date)
+headers_naver = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48"}
+exception = "동영상 기사 포토 사진 \r \t \n"
+url_elastic = '127.0.0.1'
+port = '9200'
+index = 'news'
+mapping_json = 'mapping_nori.json'
+naver_categories = ['society', 'politics', 'economic', 'culture', 'science', 'IT']
+naver_sid1 = [102, 100, 101, 103, 105, 105]
+naver_sid2 = [257, 269, 263, 245, 228 ,230]
+result_ranking = []
+result_ranking1 = []
+result_search = []
+result_search1 = []
+ranking = 10
+d_today = datetime.date.today()
+date = '20' + d_today.strftime('%y%m%d')
 
-	# ###### 2.index 삭제 ( Index 초기화 할때 아니면 항상 주석 처리 )
-	# delete_index()
-	# ###### Index 생성 
-	# create_index(mapping_json)
+es = Elasticsearch(f'{url_elastic}:{port}')
 
-	# ###### 3.기사를 저장한 JSON 파일을 DB에 저장
-	# for category in naver_categories:
-	# 	insert('Naver_news_Data[' + category + '].json')
+####### 1.네이버뉴스 크롤링 및 단어 빈도수 출력과 기사들 JSON에 저장
+for i in range(0,1):
+	crawler_naver(naver_categories[i], naver_sid2[i], naver_sid1[i], date)
 
-	# for category in daum_categories:
-	# 	insert('Daum_news_Data[' + category + '].json')
+###### 2.index 삭제 ( Index 초기화 할때 아니면 항상 주석 처리 )
+delete_index()
+###### Index 생성 
+create_index(mapping_json)
 
-	# ##### 4.DB에 저장된 기사들 제목을 검색
-	# search_news = "화재"
-	# r = search(search_news)
-	# print("검색 키워드 : " + search_news + '\n')
-	# for doc in r['hits']['hits']:
-	# 	pprint.pprint(doc['_source']['3.Title'])
+###### 3.기사를 저장한 JSON 파일을 DB에 저장
+for category in naver_categories:
+	insert('Naver_news_Data[' + category + '].json')
 
-	#END
+# #END
 
-	# 실행 순서 (실행 할 번호를 제외한 나머지는 항상 나머지 주석처리)
-	#1.네이버뉴스 크롤링 및 단어 빈도수 출력과 기사들 JSON에 저장
-	#2.index 삭제 및 생성
-	#3.기사를 저장한 JSON 파일을 DB에 저장
-	#4.DB에 저장된 기사들 제목을 검색
-	# 주석 단축기 = Ctrl + /
-
-	# nori 플러그인 설치
-	# sudo bin/elasticsearch-plugin install analysis-nori
-	# konply 모듈 설치
-	# pip install konlpy
-	# elasticsearch 설치
-	# 홈페이지 참고
-	# Beautifulsoup 설치
-	# pip install beautifulsoup4 
-	# scikit-learn 설치
-	# pip install --upgrade scikit-learn
+# nori 플러그인 설치
+# sudo bin/elasticsearch-plugin install analysis-nori
+# konply 모듈 설치
+# pip install konlpy
+# elasticsearch 설치
+# 홈페이지 참고
+# Beautifulsoup 설치
+# pip install beautifulsoup4 
+# scikit-learn 설치
+# pip install --upgrade scikit-learn

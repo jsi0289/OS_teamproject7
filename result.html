@@ -5,15 +5,15 @@
         </head>
         <body>
         <h1>
-        <p style="text-align:center;">기사 제목</p>
-        {% print(item) %}
+        <p style="text-align:center;">{% print(item) %}</p>
         </h1>
-        <p style="text-align:center;">기사 내용</p>
-        {% print(item1) %}
+        <p style="text-align:center;">{% print(item1) %}</p>
         <h2>
-        <p style="text-align:center;">이 기사와 비슷한 내용의 뉴스들을 추천받겠>습니까?
+        <form method="POST" action="/naver/result/cosine">
+        <p style="text-align:center;">이 기사와 비슷한 내용의 뉴스들을 추천받겠습니까?
         <button type="submit">확인</button>
         </p>
+        </form>
         </h2>
         </body>
 </html>

@@ -211,7 +211,7 @@ date = '20' + d_today.strftime('%y%m%d')
 es = Elasticsearch(f'{url_elastic}:{port}')
 
 ####### 1.네이버뉴스 크롤링 및 단어 빈도수 출력과 기사들 JSON에 저장
-for i in range(0,1):
+for i in range(0,6):
 	crawler_naver(naver_categories[i], naver_sid2[i], naver_sid1[i], date)
 
 ###### 2.index 삭제 ( Index 초기화 할때 아니면 항상 주석 처리 )

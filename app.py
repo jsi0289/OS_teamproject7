@@ -1,3 +1,5 @@
+# -*- coding: utf8 -*- 
+
 from flask import Flask, jsonify, request
 from flask import render_template
 from news_naver import *
@@ -18,7 +20,12 @@ def naver():
 @app.route('/naver/result',methods=['POST'])
 def result():
 	if request.method == 'POST':
-		return render_template('result.html',item  = result_search, item1 = result_search1 )
+		return render_template('result.html', item  = result_search, item1 = result_search1 )
+
+@app.route('/naver/result/cosine',methods=['POST'])
+def cosine():
+	if request.method == 'POST':
+		return render_template('cosine.html',item  = result_cosine, item1 = result_cosine1 )
 
 if __name__ == '__main__':
 	app.run(debug=True)
